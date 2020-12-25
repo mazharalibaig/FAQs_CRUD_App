@@ -78,6 +78,40 @@ router.post('/', async (req,res,next) => {
 //Update One
 router.put('/:id', async (req,res,next) => {
 
+    try {
+
+        console.log(req.params);
+
+        const value = await schema.validateAsync(req.body);
+
+        const {id} = req.params;
+
+        const items = await faqs.findOne({
+            _id: id
+        });
+
+        if(!items) 
+        {
+            console.log("Item not found!");
+        }
+        else
+        {
+            const updated = await faqs.update({
+                _id: id
+            }, {
+                $set: value
+            });
+
+            return res.json(value);
+        }
+        
+        res.end("terminated");
+
+    } catch (error) {
+        
+        next(error);
+
+    }
 
 });
 
