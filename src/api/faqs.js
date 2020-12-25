@@ -116,11 +116,25 @@ router.put('/:id', async (req,res,next) => {
 });
 
 //Delete One
-router.delete('/:id', (req,res,next) => {
+router.delete('/:id', async (req,res,next) => {
 
-    res.json({
-        message: "Hey Delete One!"
-    });
+    try {
+        
+        const { id } = req.params;
+
+        const deleted = await faqs.remove({
+        
+            _id : id
+        
+        });
+
+        return res.json(deleted);
+
+    } catch (error) {
+
+        next(error);
+    
+    }
 
 });
 
